@@ -151,6 +151,55 @@ async def group_reply_handler(_, message: Message):
 
     user_messages[uid] = {"text": text, "bot_msg_id": sent.id, "time": now}
 
+# ============ SV Save Handler (Admin Feature) ============
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+
+@bot.on_message(filters.group & filters.reply & filters.regex(r"^(?i)sv$"))
+async def save_filter_handler(_, message: Message):
+    try:
+        # Sirf admin ko allow kare
+        member = await bot.get_chat_member(message.chat.id, message.from_user.id)
+        if member.status not in ["administrator", "creator"]:
+            return  # Ignore non-admins
+
+        # Agar koi reply hi nahi kiya gaya
+        if not message.reply_to_message:
+            return
+
+        user_msg = message.reply_to_message
+
+        # Agar reply kisi admin ya bot pe tha, to ignore kare
+        if user_msg.from_user and (user_msg.from_user.is_bot or user_msg.from_user.id == message.from_user.id):
+            return
+
+        # Admin ke "sv" message ko delete karo
+        await message.delete()
+
+        # Photo + Caption + Button
+        photo_url = "https://ibb.co/DHvHzcyR"  # Apni photo link daal lena
+        caption = (
+            "Dᴀᴛᴀʙᴀsᴇ Uᴘᴅᴀᴛᴇᴅ ✅\n"
+            "Sᴇᴀʀᴄʜ ɪɴ Gʀᴏᴜᴘ..🔎\n"
+            "(Cʟɪᴄᴋ ᴛʜᴇ Bᴇʟᴏᴡ Bᴜᴛᴛᴏɴ👇)"
+        )
+
+        # Inline Button (group link auto detect kare)
+        group_username = message.chat.username
+        if group_username:
+            btn_url = f"https://t.me/movie_talk_Group"
+        else:
+            btn_url = "https://t.me/"  # fallback
+
+        buttons = InlineKeyboardMarkup(
+            [[InlineKeyboardButton("Sᴇᴀʀᴄʜ Hᴇʀᴇ", url=btn_url)]]
+        )
+
+        # Bot user ke message ko reply kare
+        await user_msg.reply_photo(photo=photo_url, caption=caption, reply_markup=buttons)
+
+    except Exception as e:
+        print(f"[SV Handler Error] {e}")
+
 # ============ Run ============
 
 bot.run()
