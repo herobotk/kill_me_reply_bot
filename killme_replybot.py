@@ -152,9 +152,10 @@ async def group_reply_handler(_, message: Message):
     user_messages[uid] = {"text": text, "bot_msg_id": sent.id, "time": now}
 
 # ============ SV Save Handler (Admin Feature) ============
-@bot.on_message(filters.group & filters.reply & filters.regex(r"(?i)^sv$"))
+@bot.on_message(filters.group & filters.reply & filters.regex(r"(?i)^\s*sv\s*$")
 async def save_filter_handler(_, message: Message):
     try:
+        print(f"SV Triggered by {message.from_user.id}")
         # Check if it's a reply
         if not message.reply_to_message:
             return
