@@ -155,18 +155,17 @@ async def group_reply_handler(_, message: Message):
 @bot.on_message(filters.group & filters.reply & filters.regex(r"(?i)^sv$"))
 async def save_filter_handler(_, message: Message):
     try:
-        member = await bot.get_chat_member(message.chat.id, message.from_user.id)
-        if member.status.lower() not in ["administrator", "creator"]:
-            return
-
+        # Check if it's a reply
         if not message.reply_to_message:
             return
 
         user_msg = message.reply_to_message
 
-        if user_msg.from_user and (user_msg.from_user.is_bot or user_msg.from_user.id == message.from_user.id):
+        # Ignore if replied message is from a bot
+        if user_msg.from_user and user_msg.from_user.is_bot:
             return
 
+        # Delete the "sv" message
         await message.delete()
 
         photo_url = "https://ibb.co/DHvHzcyR"
@@ -176,22 +175,24 @@ async def save_filter_handler(_, message: Message):
             "(Cʟɪᴄᴋ ᴛʜᴇ Bᴇʟᴏᴡ Bᴜᴛᴛᴏɴ👇)"
         )
 
-        group_username = message.chat.username
-        btn_url = f"https://t.me/{group_username}" if group_username else "https://t.me/"
+        # Fixed button URL
+        btn_url = "https://t.me/movie_talk_Group"
 
         buttons = InlineKeyboardMarkup(
             [[InlineKeyboardButton("Sᴇᴀʀᴄʜ Hᴇʀᴇ", url=btn_url)]]
         )
 
+        # Bot replies to the original message with image + button
         await user_msg.reply_photo(photo=photo_url, caption=caption, reply_markup=buttons)
 
+        # Temporary confirmation message
         temp_msg = await message.reply_text("✅ Saved Successfully Boss!")
         await asyncio.sleep(3)
         await temp_msg.delete()
 
     except Exception as e:
         print(f"[SV Handler Error] {e}")
-
+        
 # ============ Run ============
 
 bot.run()
