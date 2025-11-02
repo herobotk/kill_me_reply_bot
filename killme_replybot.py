@@ -168,7 +168,7 @@ async def save_filter_handler(_, message: Message):
         # Delete the "sv" message
         await message.delete()
 
-        photo_url = "https://ibb.co/DHvHzcyR"
+        photo_url = "https://i.postimg.cc/TP1gYxVn/images-1.jpg"
         caption = (
             "Dᴀᴛᴀʙᴀsᴇ Uᴘᴅᴀᴛᴇᴅ ✅\n"
             "Sᴇᴀʀᴄʜ ɪɴ Gʀᴏᴜᴘ..🔎\n"
