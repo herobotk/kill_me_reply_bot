@@ -150,49 +150,6 @@ async def group_reply_handler(_, message: Message):
         sent = await message.reply_text("ʀᴇQᴜᴇꜱᴛ ʀᴇᴄᴇɪᴠᴇᴅ✅\nᴜᴘʟᴏᴀᴅ ꜱᴏᴏɴ... ᴄʜɪʟʟ✨")
 
     user_messages[uid] = {"text": text, "bot_msg_id": sent.id, "time": now}
-
-# ============ SV Save Handler (Admin Feature) ============
-@bot.on_message(filters.group & filters.reply & filters.regex(r"(?i)^\s*sv\s*$"))
-async def save_filter_handler(_, message: Message):
-    try:
-        print(f"SV Triggered by {message.from_user.id}")
-        # Check if it's a reply
-        if not message.reply_to_message:
-            return
-
-        user_msg = message.reply_to_message
-
-        # Ignore if replied message is from a bot
-        if user_msg.from_user and user_msg.from_user.is_bot:
-            return
-
-        # Delete the "sv" message
-        await message.delete()
-
-        photo_url = "https://i.postimg.cc/TP1gYxVn/images-1.jpg"
-        caption = (
-            "Dᴀᴛᴀʙᴀsᴇ Uᴘᴅᴀᴛᴇᴅ ✅\n"
-            "Sᴇᴀʀᴄʜ ɪɴ Gʀᴏᴜᴘ..🔎\n"
-            "(Cʟɪᴄᴋ ᴛʜᴇ Bᴇʟᴏᴡ Bᴜᴛᴛᴏɴ👇)"
-        )
-
-        # Fixed button URL
-        btn_url = "https://t.me/movie_talk_Group"
-
-        buttons = InlineKeyboardMarkup(
-            [[InlineKeyboardButton("Sᴇᴀʀᴄʜ Hᴇʀᴇ", url=btn_url)]]
-        )
-
-        # Bot replies to the original message with image + button
-        await user_msg.reply_photo(photo=photo_url, caption=caption, reply_markup=buttons)
-
-        # Temporary confirmation message
-        temp_msg = await message.reply_text("✅ Saved Successfully Boss!")
-        await asyncio.sleep(3)
-        await temp_msg.delete()
-
-    except Exception as e:
-        print(f"[SV Handler Error] {e}")
         
 # ============ Run ============
 
