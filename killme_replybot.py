@@ -152,10 +152,6 @@ async def group_reply_handler(_, message: Message):
     user_messages[uid] = {"text": text, "bot_msg_id": sent.id, "time": now}
 
 # ============ SV Save Handler (Admin Feature) ============
-from pyrogram import Client, filters
-from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
-import asyncio
-
 @bot.on_message(filters.group & filters.reply & filters.regex(r"^(?i)sv$"))
 async def save_filter_handler(_, message: Message):
     try:
